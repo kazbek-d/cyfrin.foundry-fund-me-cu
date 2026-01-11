@@ -15,6 +15,18 @@ https://book.getfoundry.sh/
 
 ## Usage
 
+### Install
+
+check this https://github.com/smartcontractkit/chainlink-brownie-contracts
+```shell
+$ forge install smartcontractkit/chainlink-brownie-contracts
+```
+to use them need not add remupping. File foundry.toml, add this
+remappings = [
+    '@chainlink/contracts/=lib/chainlink-brownie-contracts/contracts/',
+]
+
+
 ### Build
 
 ```shell
