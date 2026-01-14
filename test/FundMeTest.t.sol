@@ -15,4 +15,12 @@ contract FundMeTest is Test {
         console.log("Some text");
         assertEq(fundMe.MINIMUM_USD(), 5e18);
     }
+
+    function testMessageSenderIsOwner() public {
+        // us -> FundMeTest -> FundMe
+        console.log("FundMeTest: fundMe.i_owner(): ", fundMe.i_owner()); // FundMeTest
+        console.log("FundMeTest: address(this): ", address(this)); // FundMeTest
+        console.log("US: msg.sender: ", msg.sender); // us
+        assertEq(fundMe.i_owner(), address(this));
+    }
 }
