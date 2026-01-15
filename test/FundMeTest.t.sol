@@ -3,6 +3,7 @@ pragma solidity ^0.8.19;
 
 import {Test, console} from "forge-std/Test.sol";
 import {FundMe} from "../src/FundMe.sol";
+import {DeployFundMe} from "../script/DeployFundMe.s.sol";
 
 // 1. Unit: test a specific part of our code
 // 2. Integration: test how our code is working with other parts of our code
@@ -12,8 +13,25 @@ import {FundMe} from "../src/FundMe.sol";
 contract FundMeTest is Test {
     FundMe fundMe;
 
+    // https://docs.chain.link/data-feeds/price-feeds/addresses?page=1&testnetPage=1&networkType=testnet&search=&testnetSearch=
+    /**
+     * Network: Ethereum Testnet
+     * Aggregator: ETH/USD
+     * Address: 0x694AA1769357215DE4FAC081bf1f309aDC325306
+     */
+
+    // https://docs.chain.link/data-feeds/price-feeds/addresses?page=1&testnetPage=1&network=zksync&networkType=testnet&search=&testnetSearch=
+    /**
+     * Network: ZKsync Sepolia testnet
+     * Aggregator: ETH/USD
+     * Address: 0xfEefF7c3fB57d18C5C6Cdd71e45D2D0b4F9377bF
+     */
+    address constant PRICE_FEED_ADDRESS =
+        0x694AA1769357215DE4FAC081bf1f309aDC325306;
+
     function setUp() external {
-        fundMe = new FundMe();
+        DeployFundMe deployFundMe = new DeployFundMe();
+        fundMe = deployFundMe.run();
     }
 
     function testMinimumDollarIsFive() public {
@@ -25,7 +43,8 @@ contract FundMeTest is Test {
         console.log("FundMeTest: fundMe.i_owner(): ", fundMe.i_owner()); // FundMeTest
         console.log("FundMeTest: address(this): ", address(this)); // FundMeTest
         console.log("US: msg.sender: ", msg.sender); // us
-        assertEq(fundMe.i_owner(), address(this));
+        //assertEq(fundMe.i_owner(), address(this));
+        assertEq(fundMe.i_owner(), msg.sender);
     }
 
     function testPriceFeedVersionIsAccurate() public {

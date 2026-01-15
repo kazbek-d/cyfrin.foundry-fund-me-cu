@@ -34,18 +34,19 @@ contract FundMe {
      * Aggregator: ETH/USD
      * Address: 0xfEefF7c3fB57d18C5C6Cdd71e45D2D0b4F9377bF
      */
-    address constant PRICE_FEED_ADDRESS =
-        0x694AA1769357215DE4FAC081bf1f309aDC325306;
+    //address constant PRICE_FEED_ADDRESS = 0x694AA1769357215DE4FAC081bf1f309aDC325306;
+    address public immutable i_price_feed_address;
 
-    constructor() {
+    constructor(address priceFeed) {
         i_owner = msg.sender;
+        i_price_feed_address = priceFeed;
     }
 
     // Allow users to send $
     // Have a minimum $ to sent
     function fund() public payable {
         require(
-            msg.value.getConversionRate(PRICE_FEED_ADDRESS) >= MINIMUM_USD,
+            msg.value.getConversionRate(i_price_feed_address) >= MINIMUM_USD,
             "didn't send enough ETH"
         );
         funders.push(msg.sender);
@@ -134,6 +135,6 @@ contract FundMe {
     }
 
     function getAggregatorV3Version() public view returns (uint256) {
-        return PRICE_FEED_ADDRESS.getVersion();
+        return i_price_feed_address.getVersion();
     }
 }
