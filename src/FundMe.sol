@@ -10,6 +10,7 @@ error FundMe_NotOwner();
 // Set minimum funds value in USD
 contract FundMe {
     using PriceConverter for uint256;
+    using PriceConverter for address;
 
     // 5 USD => 5e18 because of presigion
     uint256 public constant MINIMUM_USD = 5e18;
@@ -130,5 +131,9 @@ contract FundMe {
 
     receive() external payable {
         fund();
+    }
+
+    function getAggregatorV3Version() public view returns (uint256) {
+        return PRICE_FEED_ADDRESS.getVersion();
     }
 }

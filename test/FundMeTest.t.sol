@@ -4,6 +4,11 @@ pragma solidity ^0.8.19;
 import {Test, console} from "forge-std/Test.sol";
 import {FundMe} from "../src/FundMe.sol";
 
+// 1. Unit: test a specific part of our code
+// 2. Integration: test how our code is working with other parts of our code
+// 3. Forked: test our code on a similated real environment
+// 4. Staging: test our code on a real environemnt that is not prod
+
 contract FundMeTest is Test {
     FundMe fundMe;
 
@@ -12,7 +17,6 @@ contract FundMeTest is Test {
     }
 
     function testMinimumDollarIsFive() public {
-        console.log("Some text");
         assertEq(fundMe.MINIMUM_USD(), 5e18);
     }
 
@@ -22,5 +26,11 @@ contract FundMeTest is Test {
         console.log("FundMeTest: address(this): ", address(this)); // FundMeTest
         console.log("US: msg.sender: ", msg.sender); // us
         assertEq(fundMe.i_owner(), address(this));
+    }
+
+    function testPriceFeedVersionIsAccurate() public {
+        uint256 version = fundMe.getAggregatorV3Version();
+        console.log("getAggregatorV3Version: ", version);
+        assertEq(version, 4);
     }
 }

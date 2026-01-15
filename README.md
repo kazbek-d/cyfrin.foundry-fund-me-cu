@@ -13,6 +13,11 @@ Foundry consists of:
 
 https://book.getfoundry.sh/
 
+1. Unit: test a specific part of our code
+2. Integration: test how our code is working with other parts of our code
+3. Forked: test our code on a similated real environment
+4. Staging: test our code on a real environemnt that is not prod
+
 ## Usage
 
 ### Install
@@ -34,9 +39,10 @@ $ forge build
 ```
 
 ### Test
-
+for fork test check: https://alchemy.com/
 ```shell
 $ forge test
+$ forge test -vvv --fork-url $SEPOLIA_RPC_URL
 ```
 
 ### Format
