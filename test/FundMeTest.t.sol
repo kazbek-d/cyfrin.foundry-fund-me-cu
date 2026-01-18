@@ -52,4 +52,10 @@ contract FundMeTest is Test {
         console.log("getAggregatorV3Version: ", version);
         assertEq(version, 4);
     }
+
+    function testFundFailsWithoutEnoughETH() public {
+        vm.expectRevert(); // next line should revert!
+        // assert(This tx files/reverts)
+        fundMe.fund(); // send 0 value
+    }
 }
