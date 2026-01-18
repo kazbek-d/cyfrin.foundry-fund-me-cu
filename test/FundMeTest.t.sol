@@ -12,6 +12,10 @@ import {DeployFundMe} from "../script/DeployFundMe.s.sol";
 
 contract FundMeTest is Test {
     FundMe fundMe;
+    address alice;
+
+    uint256 constant SEND_VALUE = 0.1 ether;
+    uint256 constant STARTING_BALANCE = 10 ether;
 
     // https://docs.chain.link/data-feeds/price-feeds/addresses?page=1&testnetPage=1&networkType=testnet&search=&testnetSearch=
     /**
@@ -32,6 +36,11 @@ contract FundMeTest is Test {
     function setUp() external {
         DeployFundMe deployFundMe = new DeployFundMe();
         fundMe = deployFundMe.run();
+
+        alice = makeAddr("alice");
+        emit log_address(alice);
+        vm.deal(alice, STARTING_BALANCE);
+        //log_uint256(alice.balance);
     }
 
     function testMinimumDollarIsFive() public {
@@ -57,5 +66,14 @@ contract FundMeTest is Test {
         vm.expectRevert(); // next line should revert!
         // assert(This tx files/reverts)
         fundMe.fund(); // send 0 value
+    }
+
+    function testFundUpdatesFundedDataStructure() public {
+        vm.prank(alice); // The next TX will be sent by Alice
+        fundMe.fund{value: SEND_VALUE}();
+
+        uint256 amountFunded = fundMe.getAddressToAmountFunded(alice);
+        console.log("amountFunded: ", amountFunded);
+        assertEq(amountFunded, SEND_VALUE);
     }
 }
