@@ -18,6 +18,7 @@ https://book.getfoundry.sh/
 3. Forked: test our code on a similated real environment
 4. Staging: test our code on a real environemnt that is not prod
 
+https://docs.soliditylang.org/en/latest/style-guide.html
 ## Usage
 
 ### Install

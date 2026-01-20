@@ -106,7 +106,7 @@ contract FundMeTest is Test {
 
         // Act
         //uint256 gasStart = gasleft(); // ex.: 1000
-        vm.txGasPrice(GAS_PRICE); // ex.: 200
+        //vm.txGasPrice(GAS_PRICE); // ex.: 200
         vm.prank(fundMe.getOwner());
         fundMe.withdraw();
         //uint256 gasEnd = gasleft(); // ex.: 800
