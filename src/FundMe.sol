@@ -19,7 +19,7 @@ contract FundMe {
     mapping(address funder => uint256 amountFunded)
         private s_addressToAmountFunded;
 
-    address public immutable i_owner;
+    address private immutable i_owner;
 
     // https://docs.chain.link/data-feeds/price-feeds/addresses?page=1&testnetPage=1&networkType=testnet&search=&testnetSearch=
     /**
@@ -149,5 +149,9 @@ contract FundMe {
 
     function getFunder(uint256 index) public view returns (address) {
         return s_funders[index];
+    }
+
+    function getOwner() public view returns (address) {
+        return i_owner;
     }
 }

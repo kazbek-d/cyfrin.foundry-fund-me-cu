@@ -44,6 +44,7 @@ for fork test check: https://alchemy.com/
 $ forge test
 $ forge test -vvv --fork-url $SEPOLIA_RPC_URL
 $ forge test -vvv --fork-url $MAINNET_RPC_URL
+$ forge snapshot
 ```
 
 ### Format

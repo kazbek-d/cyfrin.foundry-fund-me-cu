@@ -49,11 +49,11 @@ contract FundMeTest is Test {
 
     function testMessageSenderIsOwner() public {
         // us -> FundMeTest -> FundMe
-        console.log("FundMeTest: fundMe.i_owner(): ", fundMe.i_owner()); // FundMeTest
+        console.log("FundMeTest: fundMe.i_owner(): ", fundMe.getOwner()); // FundMeTest
         console.log("FundMeTest: address(this): ", address(this)); // FundMeTest
         console.log("US: msg.sender: ", msg.sender); // us
         //assertEq(fundMe.i_owner(), address(this));
-        assertEq(fundMe.i_owner(), msg.sender);
+        assertEq(fundMe.getOwner(), msg.sender);
     }
 
     function testPriceFeedVersionIsAccurate() public {
@@ -68,12 +68,70 @@ contract FundMeTest is Test {
         fundMe.fund(); // send 0 value
     }
 
-    function testFundUpdatesFundedDataStructure() public {
+    modifier funded() {
+        console.log("funded :_");
         vm.prank(alice); // The next TX will be sent by Alice
         fundMe.fund{value: SEND_VALUE}();
+        _;
+    }
 
+    function testFundUpdatesFundedDataStructure() public funded {
         uint256 amountFunded = fundMe.getAddressToAmountFunded(alice);
         console.log("amountFunded: ", amountFunded);
         assertEq(amountFunded, SEND_VALUE);
+    }
+
+    function testAddsFunderToArrayOfFunders() public funded {
+        address funder = fundMe.getFunder(0);
+        console.log("funder: ", funder);
+        assertEq(funder, alice);
+    }
+
+    function testOnlyOwnerCanWethdraw() public funded {
+        vm.expectRevert(); // next line should revert!
+        vm.prank(alice); // The next TX will be sent by Alice
+        fundMe.withdraw();
+
+        vm.prank(fundMe.getOwner()); // The next TX will be sent by contract's Owner
+        fundMe.withdraw();
+    }
+
+    modifier testWithdraw() {
+        _;
+
+        // Arrange
+        uint256 startingOwnerBalance = fundMe.getOwner().balance;
+        uint256 startingFundMeBalance = address(fundMe).balance;
+
+        // Act
+        vm.prank(fundMe.getOwner());
+        fundMe.withdraw();
+
+        // Assert
+        uint256 endingOwnerBalance = fundMe.getOwner().balance;
+        uint256 endingFundMeBalance = address(fundMe).balance;
+
+        assertEq(endingFundMeBalance, 0);
+        assertEq(
+            startingOwnerBalance + startingFundMeBalance,
+            endingOwnerBalance
+        );
+
+        console.log("_: testWithdraw");
+    }
+
+    function testWithdrawWithASingleFunder() public funded testWithdraw {}
+
+    function testWithdrawFromMultipleFunders() public funded testWithdraw {
+        uint160 numberOfFunders = 10;
+        uint160 strtingFunderIndex = 1;
+
+        for (uint160 i = strtingFunderIndex; i < numberOfFunders; i++) {
+            // hoax = vm.deal & vm.prank
+            // Add funds to some account
+            // The next TX will be sent by address(i)
+            hoax(address(i), SEND_VALUE);
+            fundMe.fund{value: SEND_VALUE}();
+        }
     }
 }
