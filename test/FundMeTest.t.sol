@@ -16,6 +16,7 @@ contract FundMeTest is Test {
 
     uint256 constant SEND_VALUE = 0.1 ether;
     uint256 constant STARTING_BALANCE = 10 ether;
+    //uint256 constant GAS_PRICE = 1;
 
     // https://docs.chain.link/data-feeds/price-feeds/addresses?page=1&testnetPage=1&networkType=testnet&search=&testnetSearch=
     /**
@@ -104,8 +105,13 @@ contract FundMeTest is Test {
         uint256 startingFundMeBalance = address(fundMe).balance;
 
         // Act
+        //uint256 gasStart = gasleft(); // ex.: 1000
+        vm.txGasPrice(GAS_PRICE); // ex.: 200
         vm.prank(fundMe.getOwner());
         fundMe.withdraw();
+        //uint256 gasEnd = gasleft(); // ex.: 800
+        //uint256 gasUsed = (gasStart - gasEnd) * tx.gasprice;
+        //console.log("gasUsed: ", gasUsed);
 
         // Assert
         uint256 endingOwnerBalance = fundMe.getOwner().balance;

@@ -44,7 +44,13 @@ for fork test check: https://alchemy.com/
 $ forge test
 $ forge test -vvv --fork-url $SEPOLIA_RPC_URL
 $ forge test -vvv --fork-url $MAINNET_RPC_URL
+
+check the gas used
 $ forge snapshot
+view the low-level storage layout
+$ forge inspect FundMe storageLayout
+by checking the storage you can check any public&private variable
+$ cast storage YOUR_CONTRACT_ADDRESS
 ```
 
 ### Format
