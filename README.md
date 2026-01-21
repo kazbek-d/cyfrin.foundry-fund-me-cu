@@ -26,6 +26,9 @@ https://docs.soliditylang.org/en/latest/style-guide.html
 check this https://github.com/smartcontractkit/chainlink-brownie-contracts
 ```shell
 $ forge install smartcontractkit/chainlink-brownie-contracts
+$ forge install https://github.com/Cyfrin/foundry-devops
+or
+$ forge install Cyfrin/foundry-devops
 ```
 to use them need not add remupping. File foundry.toml, add this
 remappings = [

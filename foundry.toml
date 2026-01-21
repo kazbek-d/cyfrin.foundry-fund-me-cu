@@ -7,6 +7,8 @@ remappings = [
 ]
 fs_permissions = [{ access = "read", path = "./broadcast" }]
 solc = "0.8.19"
+# keep ffi = false as long as possible. It will allow foundry run commands directly on your machine
+ffi = true
 
 [etherscan]
 mainnet = { key = "${ETHERSCAN_API_KEY}" }
